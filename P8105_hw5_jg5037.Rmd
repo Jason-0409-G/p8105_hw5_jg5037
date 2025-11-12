@@ -306,7 +306,7 @@ city_prop
 ```
 
 ## prob_3.4 Plotting proportion estimates with CIs
-```{r prob3.4_higher_than_baltimore, fig.height=7, fig.width=7}
+```{r prob3.4_higher_than_baltimore, fig.height=7, fig.width=10}
 city_prop |>
   mutate(city_state = fct_reorder(city_state, estimate)) |>
   ggplot(aes(y = city_state, x = estimate)) +
