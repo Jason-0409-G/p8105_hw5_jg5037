@@ -13,16 +13,9 @@ library(tidyverse)
 library(scales)
 library(janitor)
 library(dplyr)
-# set global chunk options
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp   = 0.6,
-  out.width = "90%"
-)
 
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
-set.seed(1)
 ```
 
 
@@ -30,6 +23,7 @@ set.seed(1)
 ```{r prob1}
 
 # function to check if there are shared birthdays in a group of size n
+set.seed(1)
 bd_check <- function(n, days = 365) {
   bdays <- sample.int(days, size = n, replace = TRUE)
   any(duplicated(bdays))
@@ -312,14 +306,14 @@ city_prop
 ```
 
 ## prob_3.4 Plotting proportion estimates with CIs
-```{r prob3.4_higher_than_baltimore}
+```{r prob3.4_higher_than_baltimore, fig.height=7, fig.width=7}
 city_prop |>
   mutate(city_state = fct_reorder(city_state, estimate)) |>
   ggplot(aes(y = city_state, x = estimate)) +
-  geom_point(color = "#0072B2", size = 2.5) +
+  geom_point(color = "#0072B2", size = 2) +
   geom_errorbar(
     aes(xmin = conf.low, xmax = conf.high),
-    width = 0.3,
+    width = 0.2,
     color = "gray50",
     orientation = "y"
   ) +
@@ -330,14 +324,15 @@ city_prop |>
     x = "Proportion unsolved (95% CI)",
     y = NULL
   ) +
-  theme_minimal(base_size = 13) +
+  theme_minimal(base_size = 11) +
   theme(
-    plot.title = element_text(face = "bold", size = 14),
-    plot.subtitle = element_text(size = 11, color = "gray40"),
-    axis.text.y = element_text(size = 9),
+    plot.title = element_text(face = "bold", size = 15),
+    plot.subtitle = element_text(size = 10, color = "gray40"),
+    axis.text.y = element_text(size = 5.5),
     panel.grid.minor = element_blank(),
-    panel.grid.major.y = element_blank()
-  )
+    panel.grid.major.y = element_blank(),
+    plot.margin = margin(10, 10, 10, 10)
+  )+ coord_cartesian(clip = 'off')
 ```
 
 ### Comment
@@ -348,7 +343,6 @@ along with corresponding 95% confidence intervals.
 * Across all `r nrow(city_prop)` U.S. cities, the proportion of unsolved cases ranges  
 from **`r scales::percent(min(city_prop$estimate), accuracy = 0.1)`** to**`r scales::percent(max(city_prop$estimate), accuracy = 0.1)`**.  
 
-* Cities such as **`r city_prop$city_state[which.max(city_prop$estimate)]`** show the highest estimated unsolved rate of about **`r scales::percent(max(city_prop$estimate), accuracy = 0.1)`**,while **`r city_prop$city_state[which.min(city_prop$estimate)]`** has the lowest rate at approximately  
-**`r scales::percent(min(city_prop$estimate), accuracy = 0.1)`**.  
+* Cities such as **`r city_prop$city_state[which.max(city_prop$estimate)]`** show the highest estimated unsolved rate of about **`r scales::percent(max(city_prop$estimate), accuracy = 0.1)`**,while **`r city_prop$city_state[which.min(city_prop$estimate)]`** has the lowest rate at approximately **`r scales::percent(min(city_prop$estimate), accuracy = 0.1)`**.  
 
 The increasing pattern from bottom to top highlights substantial variation in homicide case resolution rates across cities.
