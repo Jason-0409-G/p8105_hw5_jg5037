@@ -335,7 +335,7 @@ city_prop |>
   )+ coord_cartesian(clip = 'off')
 ```
 
-### Comment
+### Comment for the plot
 
 The plot displays the estimated proportion of unsolved homicides for each city,  
 along with corresponding 95% confidence intervals.  
